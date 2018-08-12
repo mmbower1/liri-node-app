@@ -1,6 +1,5 @@
 //create functions for reading file, grabbing twitter info, spotify info,  ombdbgo, 
 //(bonus) logging info into log.txt file
-
 require("dotenv").config();
 
 var keys = require('./keys');
@@ -20,10 +19,14 @@ var request = require("request");
 * `movie-this`
 * `do-what-it-says` 
 */
+
+//arguments for node
 var command = process.argv[2];
 var requestItem = process.argv[3];
 
 console.log(process.argv);
+
+//user inputs
 if (command === "my-tweets") {
     getTweets();
 }
@@ -37,11 +40,14 @@ else if (command === "undefined") {
     console.log("Type one: tweets, spotify, or omdb");
 }
 
-
+//gets last 20 
 function getTweets() {
     var params = { screen_name: 'MattB98760655' };
+
+    //parameters for users twitter info
     client.get('statuses/user_timeline', params, function (error, tweets, response) {
         if (!error) {
+
             // console.log(JSON.stringify(tweets));
             var count = Math.min(20, tweets.length);
 
@@ -52,11 +58,14 @@ function getTweets() {
     });
 }
 
+//fetches spotify song/artist information
 function getSpotify() {
     var spotify = new Spotify({
         id: '8826a51fab644f9abc31f1a49a163983',
         secret: 'e600590c2c7a492a9b1890603ee8b8e3'
     });
+
+    //search function
     spotify.search({
         type: 'track',
         query: requestItem
@@ -66,9 +75,11 @@ function getSpotify() {
         }
         console.log("Song name: " + data.tracks.items[0].name);
 
+        //pathway into JSON package set to variable
         var songArtists = data.tracks.items[0].artists;
+        //stores string
         var artistString = "";
-        
+ 
         for (var i = 0; i < songArtists.length; i++) {
             artistString += songArtists[i].name + " ";
         }
@@ -79,6 +90,7 @@ function getSpotify() {
 
 //connects to random.txt
 var readRandom = function () {
+
     // Running the readFile module that's inside of fs. this connects to random.txt
     fs.readFile("random.txt", "utf8", function (err, data) {
         if (err) {
