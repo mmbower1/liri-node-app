@@ -20,7 +20,7 @@ var request = require("request");
 * `do-what-it-says` 
 */
 
-//arguments for node
+//parameter arguments for node
 var command = process.argv[2];
 var requestItem = process.argv[3];
 
@@ -33,8 +33,8 @@ if (command === "my-tweets") {
 else if (command === "spotify-this-song") {
     getSpotify();
 }
-else if (command === "omdb") {
-    getOMDB();
+else if (command === "movie-this") {
+    getOMDB(requestItem);
 }
 else if (command === "undefined") {
     console.log("Type one: tweets, spotify, or omdb");
@@ -52,7 +52,7 @@ function getTweets() {
             var count = Math.min(20, tweets.length);
 
             for (var i = 0; i < count; i++) {
-                console.log(tweets[i].text);
+                console.log("Your sweet history of tweets: " + tweets[i].text);
             }
         }
     });
@@ -77,13 +77,16 @@ function getSpotify() {
 
         //pathway into JSON package set to variable
         var songArtists = data.tracks.items[0].artists;
-        //stores string
+
+        //stores in empty string
         var artistString = "";
- 
+
         for (var i = 0; i < songArtists.length; i++) {
             artistString += songArtists[i].name + " ";
         }
         console.log("Artist: " + artistString);
+        console.log("Song name: ");
+        console.log("Link: ");
         console.log("Album: " + data.tracks.items[0].album.name);
     });
 }
@@ -100,8 +103,8 @@ var readRandom = function () {
     });
 }
 
-var getOMDB = function (movieName) {
-    if (movie === "undefined") {
+function getOMDB (movieName) {
+    if (movieName === "undefined") {
         movieName === "Mr. Nobody";
     }
 
@@ -111,7 +114,7 @@ var getOMDB = function (movieName) {
         if (!error && response.statusCode === 200) {
 
             var jsonData = JSON.parse(body);
-
+            //console.log(jsonData);
             console.log("Title: " + jsonData.Title);
             console.log("Year: " + jsonData.Year);
             console.log("Rated: " + jsonData.Rated);
@@ -120,7 +123,7 @@ var getOMDB = function (movieName) {
             console.log("Language: " + jsonData.Language);
             console.log("Plot: " + jsonData.Plot);
             console.log("Actors: " + jsonData.Actors);
-            console.log("Rotten Tomatoes Rating: " + jsonData.Ratings[1].Value);
+            console.log("Rotten Tomatoes Rating: " + jsonData.Ratings[0]);
         }
     });
 }
